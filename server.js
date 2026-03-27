@@ -1,25 +1,36 @@
 const express = require("express");
 const fs = require("fs");
 const cors = require("cors");
+const path = require("path");
 
 const app = express();
+
+// Middleware
 app.use(express.json());
 app.use(cors());
 
-// 📂 Read users
+// 📂 File path (important for Render)
+const filePath = path.join(__dirname, "users.json");
+
+// 📥 Read users
 function readUsers() {
   try {
-    const data = fs.readFileSync("users.json");
+    const data = fs.readFileSync(filePath, "utf-8");
     return JSON.parse(data);
-  } catch {
+  } catch (err) {
     return [];
   }
 }
 
 // 💾 Save users
 function saveUsers(data) {
-  fs.writeFileSync("users.json", JSON.stringify(data, null, 2));
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }
+
+// 🌐 Root route (fixes "Cannot GET /")
+app.get("/", (req, res) => {
+  res.send("Backend running 🚀");
+});
 
 // 🚀 API to store data
 app.post("/save", (req, res) => {
@@ -42,7 +53,9 @@ app.post("/save", (req, res) => {
   res.send("Saved successfully ✅");
 });
 
-// 🟢 Start server
-app.listen(3000, () => {
-  console.log("🔥 Server running on http://localhost:3000");
+// 🔥 PORT FIX FOR RENDER
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`🔥 Server running on port ${PORT}`);
 });
